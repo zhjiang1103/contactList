@@ -4,7 +4,7 @@ import MyNavBar from './components/Navbar'
 import ListStudents from './components/ListStudents'
 
 
-function App() {
+function Home() {
 
   return (
     <div className="App">
@@ -15,4 +15,4 @@ function App() {
   )
 }
 
-export default App
+export default Home
