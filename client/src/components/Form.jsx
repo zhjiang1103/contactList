@@ -1,43 +1,43 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Form } from "react-bootstrap"
 
-const MyForm = ({ onSaveStudent, editingStudent, onUpdateStudent }) => {
+const MyForm = ({ onSaveContact, editingContact, onUpdateContact }) => {
 
     // This is the original State with not initial student 
-    const [student, setStudent] = useState(editingStudent || {
-        firstname: "",
-        lastname: "",
-        is_current: false
+    const [contact, setContact] = useState(editingContact || {
+        name: "",
+        email: "",
+        phone: "",
+        notes: "",
     });
 
     //create functions that handle the event of the user typing into the form
     const handleNameChange = (event) => {
-        const firstname = event.target.value;
-        setStudent((student) => ({ ...student, firstname }));
+        const name = event.target.value;
+        setContact((contact) => ({ ...contact, name }));
 
     };
 
-    const handleLastnameChange = (event) => {
-        const lastname = event.target.value;
-        setStudent((student) => ({ ...student, lastname }));
+    const handleEmailChange = (event) => {
+        const email = event.target.value;
+        setContact((contact) => ({ ...contact, email }));
     };
 
-    const handleCheckChange = (event) => {
-        const is_current = event.target.checked;
-        //console.log(iscurrent);
-        setStudent((student) => ({ ...student, is_current }));
+    const handlePhoneChange = (event) => {
+        const phone = event.target.value;
+        setContact((contact) => ({ ...contact, phone }));
     };
 
     const clearForm = () => {
-        setStudent({ firstname: "", lastname: "", is_current: false })
+        setContact({ name: "", email: "", phone: "" })
     }
 
     //A function to handle the post request
-    const postStudent = (newStudent) => {
-        return fetch("http://localhost:8080/api/students", {
+    const postContact = (newContact) => {
+        return fetch("http://localhost:8080/api/contactlist", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newStudent),
+            body: JSON.stringify(newContact),
         })
             .then((response) => {
                 return response.json();
@@ -45,24 +45,24 @@ const MyForm = ({ onSaveStudent, editingStudent, onUpdateStudent }) => {
             .then((data) => {
                 //console.log("From the post ", data);
                 //I'm sending data to the List of Students (the parent) for updating the list
-                onSaveStudent(data);
+                onSaveContact(data);
                 //this line just for cleaning the form
                 clearForm();
             });
     };
 
-    //A function to handle the post request
-    const putStudent = (toEditStudent) => {
-        return fetch(`http://localhost:8080/api/students/${toEditStudent.id}`, {
+    //A function to handle the put request
+    const putContact = (toEditContact) => {
+        return fetch(`http://localhost:8080/api/contactlist/${toEditContact.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(toEditStudent),
+            body: JSON.stringify(toEditContact),
         })
             .then((response) => {
                 return response.json();
             })
             .then((data) => {
-                onUpdateStudent(data);
+                onUpdateContact(data);
                 //this line just for cleaning the form
                 clearForm();
             });
@@ -72,47 +72,49 @@ const MyForm = ({ onSaveStudent, editingStudent, onUpdateStudent }) => {
     //A function to handle the submit in both cases - Post and Put request!
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (student.id) {
-            putStudent(student);
+        if (contact.id) {
+            putContact(contact);
         } else {
-            postStudent(student);
+            postContact(contact);
         }
     };
 
     return (
         <Form className='form-students' onSubmit={handleSubmit}>
             <Form.Group>
-                <Form.Label>First Name</Form.Label>
+                <Form.Label>Name</Form.Label>
                 <input
                     type="text"
                     id="add-user-name"
-                    placeholder="First Name"
+                    placeholder="Name"
                     required
-                    value={student.firstname}
+                    value={contact.name}
                     onChange={handleNameChange}
                 />
             </Form.Group>
             <Form.Group>
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <input
                     type="text"
                     id="add-user-lastname"
-                    placeholder="Last Name"
+                    placeholder="Email"
                     required
-                    value={student.lastname}
-                    onChange={handleLastnameChange}
+                    value={contact.email}
+                    onChange={handleEmailChange}
                 />
             </Form.Group>
-            <Form.Check
-                type={'checkbox'}
-                id={`isCurrent`}
-                checked={student.is_current}
-                onChange={handleCheckChange}
-                label={`Are they in the current program?`}
-            />
+            <Form.Label>Phone</Form.Label>
+                <input
+                    type="text"
+                    id="add-user-lastname"
+                    placeholder="Phone"
+                    required
+                    value={contact.phone}
+                    onChange={handlePhoneChange}
+                />
             <Form.Group>
-            <Button type="submit" variant="outline-success">{student.id ? "Edit Student" : "Add Student"}</Button>
-            {student.id ? <Button type="button" variant="outline-warning" onClick={clearForm}>Cancel</Button> : null}
+            <Button type="submit" variant="outline-success">{contact.id ? "Edit Contact" : "Add Contact"}</Button>
+            {contact.id ? <Button type="button" variant="outline-warning" onClick={clearForm}>Cancel</Button> : null}
             </Form.Group>
         </Form>
     );
