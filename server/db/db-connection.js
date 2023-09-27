@@ -4,5 +4,8 @@ const db = new Pool({
   ssl: (process.env.DATABASE_SSL != "false") 
   }
 );
+db.on('error', (err) => {
+  console.error('Database error:', err);
+});
 
 module.exports = db;
