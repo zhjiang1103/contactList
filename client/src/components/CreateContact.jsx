@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 
-const createContact = ({ onSaveContact, editingContact, onUpdateContact }) => {
+const CreateContact = ({ onSaveContact, editingContact, onUpdateContact }) => {
     // This is the original State with not initial student
     const [contact, setContact] = useState(
         editingContact || {
@@ -142,4 +142,4 @@ const createContact = ({ onSaveContact, editingContact, onUpdateContact }) => {
     );
 };
 
-export default createContact;
+export default CreateContact;

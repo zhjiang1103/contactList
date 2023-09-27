@@ -1,78 +1,82 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import * as ioicons from 'react-icons/io5'
-import createContact from './Create-contact'
-import viewContact from './View-contact'
+import ViewContact from './ViewContact'
+import CreateContact from './CreateContact'
 
 const Contacts = () => {
 
     // this is my original state with an array of students 
-    const [students, setStudents] = useState([]);
+    const [contacts, setContacts] = useState([]);
 
     //this is the state needed for the UpdateRequest
-    const [editingStudent, setEditingStudent] = useState(null)
+    const [editingcontact, setEditingContact] = useState(null)
 
-    const loadStudents = () => {
+    const loadContacts = () => {
         // A function to fetch the list of students that will be load anytime that list change
-        fetch("http://localhost:8080/api/students")
+        fetch("http://localhost:8080/api/contactlist")
             .then((response) => response.json())
-            .then((students) => {
-                setStudents(students);
+            .then((contacts) => {
+                setContacts(contacts);
             });
     }
 
     useEffect(() => {
-        loadStudents();
-    }, [students]);
+        loadContacts();
+    }, [contacts]);
 
-    const onSaveStudent = (newStudent) => {
-        //console.log(newStudent, "From the parent - List of Students");
-        setStudents((students) => [...students, newStudent]);
+    const onSaveContact = (newContact) => {
+                console.log("Inside the post", newContact);
+                setContacts((contacts) => [...contacts, newContact]);
     }
 
 
     //A function to control the update in the parent (student component)
-    const updateStudent = (savedStudent) => {
-        // console.log("Line 29 savedStudent", savedStudent);
-        // This function should update the whole list of students - 
-        loadStudents();
+    const updateContact = (savedContact) => {
+       
+                console.log("Inside the put", savedContact)
+                setContacts([...contacts, savedContact])
+                loadContacts();
     }
-
-    //A function to handle the Delete funtionality
-    const onDelete = (student) => {
-        //console.log(student, "delete method")
-        return fetch(`http://localhost:8080/api/students/${student.id}`, {
-            method: "DELETE"
-        }).then((response) => {
-            //console.log(response);
-            if (response.ok) {
-                loadStudents();
-            }
-        })
-    }
-
-    //A function to handle the Update functionality
-    const onUpdate = (toUpdateStudent) => {
-        //console.log(toUpdateStudent);
-        setEditingStudent(toUpdateStudent);
-
-    }
+    // console.log("Line 29 savedStudent", savedStudent);
+    // This function should update the whole list of students - 
+    
 
 
+//A function to handle the Delete funtionality
+const onDelete = (contact) => {
+    //console.log(student, "delete method")
+    fetch(`http://localhost:8080/api/contactlist/${contact.id}`, {
+        method: "DELETE"
+    }).then((response) => {
+        //console.log(response);
+        if (response.ok) {
+            loadContacts();
+        }
+    })
+}
 
-    return (
-        <div className="mybody">
+//A function to handle the Update functionality
+const onUpdate = (toUpdateContact) => {
+    //console.log(toUpdateStudent);
+    setEditingContact(toUpdateContact);
+
+}
+
+
+
+return (
+    <div className="mybody">
         <div className="list-students">
-            <h2>Techtonica Participants </h2>
+            <h2>Contacts list </h2>
             <ul>
-                {students.map((student) => {
-                    return <li key={student.id}> <Student student={student} toDelete={onDelete} toUpdate={onUpdate} /></li>
+                {contacts.map((contact) => {
+                    return <li key={contact.id}> <ViewContact contact={contact} toDelete={onDelete} toUpdate={onUpdate} /></li>
                 })}
             </ul>
         </div>
-        <MyForm key={editingStudent ? editingStudent.id : null} onSaveStudent={onSaveStudent} editingStudent={editingStudent} onUpdateStudent={updateStudent} />
-        </div>
-    );
-}
-
+        <CreateContact key={editingcontact ? editingcontact.id : null} onSaveContact={onSaveContact} editingContact={editingcontact} onUpdateContact={updateContact} />
+    </div>
+);
+  }
 
 export default Contacts
