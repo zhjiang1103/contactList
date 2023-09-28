@@ -43,17 +43,17 @@ const Contacts = () => {
 
 
 //A function to handle the Delete funtionality
-// const onDelete = (contact) => {
-//     //console.log(student, "delete method")
-//     fetch(`http://localhost:8080/api/contactlist/${contact.id}`, {
-//         method: "DELETE"
-//     }).then((response) => {
-//         //console.log(response);
-//         if (response.ok) {
-//             loadContacts();
-//         }
-//     })
-// }
+const onDelete = (contact) => {
+    //console.log(student, "delete method")
+    fetch(`http://localhost:8080/api/contactlist/${contact.id}`, {
+        method: "DELETE"
+    }).then((response) => {
+        //console.log(response);
+        if (response.ok) {
+            loadContacts();
+        }
+    })
+}
 
 //A function to handle the Update functionality
 const onUpdate = (toUpdateContact) => {
@@ -70,7 +70,7 @@ return (
             <h2>Contacts list </h2>
             <ul>
                 {contacts.map((contact) => {
-                    return <li key={contact.id}> <ViewContact contact={contact}  toUpdate={onUpdate} /></li>
+                    return <li key={contact.id}> <ViewContact contact={contact}  toUpdate={onUpdate}  toDelete={onDelete}/></li>
                 })}
             </ul>
         </div>

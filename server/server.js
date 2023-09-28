@@ -51,19 +51,19 @@ app.post('/api/contactlist', async (req, res) => {
 
 });
 
-// // delete request for students
-// app.delete('/api/students/:studentId', async (req, res) => {
-//     try {
-//         const studentId = req.params.studentId;
-//         await db.query('DELETE FROM students WHERE id=$1', [studentId]);
-//         console.log("From the delete request-url", studentId);
-//         res.status(200).end();
-//     } catch (e) {
-//         console.log(e);
-//         return res.status(400).json({ e });
+// delete request for students
+app.delete('/api/contactlist/:contactId', async (req, res) => {
+    try {
+        const contactId = req.params.contactId;
+        await db.query('DELETE FROM contact WHERE id=$1', [contactId]);
+        console.log("From the delete request-url", contactId);
+        res.status(200).end();
+    } catch (e) {
+        console.log(e);
+        return res.status(400).json({ e });
 
-//     }
-// });
+    }
+});
 
 //A put request - Update a contact 
 app.put('/api/contactlist/:contactId', async (req, res) =>{
