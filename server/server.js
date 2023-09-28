@@ -18,9 +18,11 @@ app.get('/', (req, res) => {
 // create the get request for contact in the endpoint '/api/contactlist'
 app.get('/api/contactlist', async (req, res) => {
     try {
+       // const { rows: contact } = await db.query('SELECT * FROM contact');
         const { rows: contact } = await db.query('SELECT * FROM contact');
         res.send(contact);
     } catch (e) {
+        console.error(e);
         return res.status(400).json({ e });
     }
 });
